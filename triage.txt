@@ -1,0 +1,51 @@
+Modelo de examen para implementar una Cola de Prioridad. Está redactado con el mismo nivel de exigencia que suelen tener los parciales universitarios de Algoritmos y Estructuras de Datos.
+
+---
+
+### Ejercicio Práctico: Sistema de Triage - Guardia Médica (Cola de Prioridad)
+
+**Contexto del problema:**
+El Hospital Central necesita modernizar el sistema de atención de su guardia médica. Actualmente, los pacientes son atendidos estrictamente por orden de llegada, lo cual ha generado problemas graves cuando ingresan personas con emergencias de riesgo de vida.
+
+Se le solicita desarrollar el módulo central de este sistema en lenguaje C utilizando **memoria dinámica y listas enlazadas**. El sistema implementará una "Cola de Prioridad", donde el orden de atención (desacolar) dependerá de la gravedad del paciente.
+
+**Estructuras de datos requeridas:**
+Deberá basarse en la siguiente definición para la información (puede adaptar los nombres si lo desea):
+
+```c
+typedef struct {
+    int idPaciente;
+    char nombreApellido[50];
+    int nivelGravedad;    // 1: Rojo (Riesgo de vida) | 2: Amarillo (Urgencia) | 3: Verde (Leve)
+    char motivoConsulta[100];
+} Paciente;
+
+typedef struct Nodo {
+    Paciente dato;
+    struct Nodo *siguiente;
+} Nodo;
+
+```
+
+**Reglas de negocio (Lógica de la cola):**
+
+1. **Regla de Prioridad:** Un paciente con `nivelGravedad` 1 debe ser atendido antes que cualquier paciente con nivel 2 o 3.
+2. **Regla FIFO (Sub-cola):** Si ingresa un paciente con `nivelGravedad` 2, debe ser posicionado *detrás* de todos los pacientes nivel 1 y *detrás* de todos los pacientes nivel 2 que ya estaban esperando, pero *adelante* de todos los pacientes nivel 3.
+3. El primer nodo de la estructura (el *frente*) siempre debe contener al paciente que debe ser atendido inmediatamente.
+
+**Se solicita codificar las siguientes funciones:**
+
+* **1. `acolarPaciente(...)**`
+Recibe los punteros de la estructura y los datos de un nuevo paciente. Debe instanciar un nuevo nodo e insertarlo en la posición correcta de la cola respetando estrictamente las Reglas de Prioridad y Regla FIFO explicadas arriba. *(Nota: Esta es la función principal a evaluar).*
+* **2. `atenderSiguiente(...)**`
+Retira al paciente que se encuentra al frente de la cola (desacolar), libera la memoria del nodo correspondiente y retorna la estructura `Paciente` para que sus datos sean mostrados por pantalla. Debe contemplar el caso de que la guardia esté vacía.
+* **3. `mostrarSalaDeEspera(...)**`
+Recorre toda la cola sin modificarla, imprimiendo por pantalla el ID, Nombre y Nivel de Gravedad de cada paciente, demostrando que el orden de prioridad se está cumpliendo.
+* **4. `abandonarGuardia(...)**`
+Recibe el ID de un paciente. A veces, las personas con casos leves (Verde) se cansan de esperar y se retiran del hospital antes de ser llamados. Esta función debe buscar al paciente por su ID, desenlazarlo de la cola (sin romper los enlaces de los demás) y liberar su memoria. Retorna `1` si tuvo éxito o `0` si el ID no estaba en la cola.
+
+**Restricciones:**
+
+* Debe resolver el problema operando únicamente sobre los punteros de la lista enlazada (modificando los `.siguiente`).
+* **NO** está permitido usar arreglos (vectores) auxiliares, ni múltiples colas separadas (como un arreglo de 3 colas). Todo debe estar en una única lista enlazada.
+* **NO** está permitido aplicar algoritmos de ordenamiento (Burbuja, Selección, etc.) sobre la lista. La lista debe mantenerse ordenada en el momento exacto de cada inserción.

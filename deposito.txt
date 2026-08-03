@@ -1,0 +1,48 @@
+Ejercicio Práctico: Gestión de Inventario en Depósito (Pilas)
+
+Contexto del problema:
+La empresa "Logística Express" posee un depósito de pasillos estrechos donde la mercadería (cajas pesadas) se almacena apilándose verticalmente, una sobre otra. Por limitaciones físicas de la maquinaria (autoelevadores), solo es posible ingresar o retirar la caja que se encuentra en la cima (tope) de la pila.
+
+Se le solicita desarrollar un programa en C utilizando memoria dinámica y listas enlazadas que simule el comportamiento de una de estas pilas de cajas.
+
+Estructuras de datos requeridas:
+Deberá basarse en la siguiente definición:
+
+C
+typedef struct {
+    int codigoCaja;
+    char contenido[50];
+    float pesoKg;
+} Caja;
+
+typedef struct Nodo {
+    Caja dato;
+    struct Nodo *siguiente;
+} Nodo;
+
+Reglas del depósito (Lógica LIFO):
+
+Regla de Apilamiento: Toda caja nueva que ingresa al depósito se coloca obligatoriamente en la cima de la pila.
+
+Regla de Extracción: Solo se puede retirar la caja que está en el tope.
+
+Regla de Búsqueda: Si se necesita retirar una caja que está en el medio o en el fondo de la pila, se deben retirar temporalmente todas las cajas que están por encima, extraer la caja deseada, y luego volver a apilar las cajas retiradas temporalmente para que conserven su orden original.
+
+Se solicita codificar las siguientes funciones:
+
+1. apilarCaja(...) y desapilarCaja(...)
+Las operaciones clásicas (Push y Pop) para manejar la pila. Recuerde que, a diferencia de las colas, aquí solo necesita un puntero al tope. Ambas funciones deben actualizar correctamente el puntero de la estructura y manejar la memoria dinámica.
+
+2. mostrarPila(...)
+Recorre la pila desde el tope hasta la base, mostrando los datos de cada caja. Este recorrido solo es de lectura (no extrae los nodos).
+
+3. extraerCajaEspecifica(...)
+(El núcleo del examen). Recibe el puntero al tope de la pila original y un codigoCaja a buscar.
+La función debe buscar esa caja y eliminarla del sistema, pero respetando el orden de las demás cajas. Si la caja está debajo de otras, deberá utilizar una pila auxiliar para guardar temporalmente las cajas superiores, eliminar la caja solicitada, y finalmente vaciar la pila auxiliar devolviendo las cajas a la pila principal.
+Debe retornar 1 si encontró y eliminó la caja, o 0 si el código no existía.
+
+Restricciones:
+
+Debe resolver la extracción específica utilizando estrictamente la lógica LIFO. NO está permitido puentear nodos (modificando los .siguiente del medio de la lista como se hace en listas simples o colas). Debe usar las funciones apilarCaja y desapilarCaja (o sus lógicas equivalentes) hacia una pila auxiliar.
+
+NO está permitido usar arreglos (vectores) auxiliares para guardar las cajas temporales. Solo se permite declarar otro puntero Nodo *topeAuxiliar = NULL;.
